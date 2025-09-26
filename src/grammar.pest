@@ -1,0 +1,62 @@
+// Grammar for algebraic expressions
+WHITESPACE = _{ " " | "\t" | "\n" | "\r" }
+
+// Numbers can be integers, rationals, or complex
+number = { float | integer }
+integer = { ("+" | "-")? ~ ASCII_DIGIT+ }
+float = { ("+" | "-")? ~ ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT+ }
+
+// Variables (single or multi-character)
+variable = { ASCII_ALPHA ~ (ASCII_ALPHANUMERIC | "_")* }
+
+// Mathematical constants
+constant = { "pi" | "e" | "i" | "phi" }
+
+// Primary expressions
+primary = { 
+    "(" ~ expression ~ ")" |
+    function_call |
+    constant |
+    number |
+    variable
+}
+
+// Function calls (sin, cos, log, etc.)
+function_call = { function_name ~ "(" ~ expression ~ ("," ~ expression)* ~ ")" }
+function_name = { 
+    "sin" | "cos" | "tan" | "log" | "ln" | "exp" | "sqrt" | 
+    "abs" | "gcd" | "lcm" | "det" | "trace" | "inv"
+}
+
+// Unary operators
+unary = { ("+" | "-")? ~ primary }
+
+// Power operations (right associative)
+power = { unary ~ ("^" ~ unary)* }
+
+// Multiplicative operations
+term = { power ~ (("*" | "/" | "mod") ~ power)* }
+
+// Additive operations  
+sum = { term ~ (("+" | "-") ~ term)* }
+
+// Comparison operations
+comparison = { sum ~ (("=" | "!=" | "<" | ">" | "<=" | ">=") ~ sum)? }
+
+// Logical operations
+logical_and = { comparison ~ ("&&" | "and") ~ comparison }
+logical_or = { logical_and ~ ("||" | "or") ~ logical_and }
+
+// Full expression
+expression = { logical_or | comparison | sum }
+
+// Statements
+statement = { 
+    assignment |
+    expression
+}
+
+assignment = { variable ~ "=" ~ expression }
+
+// Top level
+program = { SOI ~ statement ~ (";" ~ statement)* ~ ";"? ~ EOI }
