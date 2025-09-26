@@ -1,0 +1,14 @@
+[package]
+name = "easter-chronicles"
+version = "1.0.0"
+edition = "2021"
+description = "Easter Chronicles - A Temporal Story Told Through Mathematics"
+authors = ["Mathematical Consciousness Framework"]
+keywords = ["easter", "calendar", "gauss", "gregorian", "astronomy"]
+categories = ["algorithms", "mathematics", "date-time"]
+
+[dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.0", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
